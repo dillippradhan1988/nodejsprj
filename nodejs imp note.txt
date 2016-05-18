@@ -1,0 +1,26 @@
+1135
+
+to set & get port no 
+	app.set(port, process.env.PORT || 3000)
+	app.get('port')
+
+nodejs			express
+------          -------
+res.end			res.send
+res.writeHead	res.set
+
+"use" is the method by which Express addsmiddleware.
+
+Express can distinguish between the 404 and 500 handlers by the number of arguments
+their callback functions take
+
+middleware provides modularization, making it easier to handle requests.
+
+git --version
+git init
+git add -A chapter3.js //single addition
+git add -A //for all file & folder addition
+git commit -m "chapter 3." //for commit
+git remote add origin https://github.com/dillippradhan1988/nodejsprj.git
+git push -u origin master
+
