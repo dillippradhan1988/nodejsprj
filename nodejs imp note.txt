@@ -16,11 +16,28 @@ their callback functions take
 
 middleware provides modularization, making it easier to handle requests.
 
+The
+caret (^) in front of the package versions indicates that any version that starts with the
+specified version number—up to the next major version number—will work
+
+"run npm install" to reinstall all modules that is added in package.json
+
+Node modules, as the name implies, offer a mechanism for modularization and
+encapsulation. npm packages provide a standardized scheme for storing, versioning,
+and referencing projects (which are not restricted to modules)
+
+if you want something to be visible outside of the module, you have to add it to exports .
+This is a good thing: encapsulation allows for less error-prone and fragile code.
+var fortune = require('./lib/fortune.js');
+"./" signals to Node that it should not
+
+
+look for the module in the node_modules directory
 git --version
 git init
 git add -A chapter3.js //single addition
 git add -A //for all file & folder addition
 git commit -m "chapter 3." //for commit
-git remote add origin https://github.com/dillippradhan1988/nodejsprj.git
+git remote add origin https://github.com/dillippradhan1988/nodejsprj.git //for one time run
 git push -u origin master
 

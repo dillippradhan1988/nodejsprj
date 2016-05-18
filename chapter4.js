@@ -9,13 +9,8 @@ app.set('view engine','handlebars');
 //static middleware used for adding static to project css,javascript etc
 app.use(express.static(__dirname + '/public'));
 
-var fortunes 	=	[
-		"Conquer your fears or they will conquer you.",
-		"Rivers need springs.",
-		"Do not fear what you don't know.",
-		"You will have a pleasant surprise.",
-		"Whenever possible, keep it simple.",
-];
+//including custom module
+var fortune 	=	require('./lib/fortune.js');
 
 app.set('port',process.env.PORT || 3000);
 
@@ -28,8 +23,7 @@ app.get('/',function(req,res){
 app.get('/about',function(req,res){
 	//res.type('text/plain');
 	//res.send('About us page');
-	var randomFortune =	fortunes[Math.floor(Math.random() * fortunes.length)];
-	res.render('about', { fortune: randomFortune });
+	res.render('about', { fortune: fortune.getFortune() });
 });
 
 //custom 404 page
