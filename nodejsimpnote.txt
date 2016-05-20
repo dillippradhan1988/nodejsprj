@@ -1,0 +1,167 @@
+1135
+
+to set & get port no 
+	app.set(port, process.env.PORT || 3000)
+	app.get('port')
+
+nodejs			express
+------          -------
+res.end			res.send
+res.writeHead	res.set
+
+"use" is the method by which Express addsmiddleware.
+
+Express can distinguish between the 404 and 500 handlers by the number of arguments
+their callback functions take
+
+middleware provides modularization, making it easier to handle requests.
+
+The
+caret (^) in front of the package versions indicates that any version that starts with the
+specified version number—up to the next major version number—will work
+
+"run npm install" to reinstall all modules that is added in package.json
+
+Node modules, as the name implies, offer a mechanism for modularization and
+encapsulation. npm packages provide a standardized scheme for storing, versioning,
+and referencing projects (which are not restricted to modules)
+
+if you want something to be visible outside of the module, you have to add it to exports .
+This is a good thing: encapsulation allows for less error-prone and fragile code.
+var fortune = require('./lib/fortune.js');
+"./" signals to Node that it should not
+
+
+
+http://localhost:3000/about?test=1#history
+	http:// 		=>	protocol
+	localhost		=>	host
+	:3000			=>	port
+	/about			=>	path
+	?test=1			=>	querystring
+	#history		=>	fragment
+
+Protocol
+	The protocol determines how the request will be transmitted. We will be dealing
+	exclusively with http and https. Other common protocols include file and ftp.
+Host
+	The host identifies the server. Servers on your computer (localhost) or a local net‐
+	work may simply be one word, or it may be a numeric IP address. On the Internet,
+	the host will end in a top-level domain (TLD) like .com or .net. Additionally, there
+	may be subdomains, which prefix the hostname. www is a very common subdo‐
+	main, though it can be anything. Subdomains are optional.
+Port
+	Each server has a collection of numbered ports. Some port numbers are “special,”
+	like 80 and 443. If you omit the port, port 80 is assumed for HTTP and 443 for
+	HTTPS. In general, if you aren’t using port 80 or 443, you should use a port number
+	greater than 1023. 1 It’s very common to use easy-to-remember port numbers like
+	3000, 8080, and 8088.
+Path
+	The path is generally the first part of the URL that your app cares about (it is possible
+	to make decisions based on protocol, host, and port, but it’s not good practice). The
+	path should be used to uniquely identify pages or other resources in your app.
+Querystring
+	The querystring is an optional collection of name/value pairs. The querystring
+	starts with a question mark (?), and name/value pairs are separated by ampersands
+	(&). Both names and values should be URL encoded. JavaScript provides a built-in
+	function to do that: encodeURIComponent . For example, spaces will be replaced with
+	plus signs (+). Other special characters will be replaced with numeric character
+	references.
+Fragment
+	The fragment (or hash) is not passed to the server at all: it is strictly for use by the
+	browser. It is becoming increasingly common for single-page applications or AJAX-
+	heavy applications to use the fragment to control the application. Originally, the
+	fragment’s sole purpose was to cause the browser to display a specific part of the
+	document, marked by an anchor tag ( <a id="chapter06"> )
+Ports 0-1023 are “well-known ports.”
+
+Disabling Express’s default X-Powered-By header is easy:
+	app.disable('x-powered-by');
+The format of the Content-Type header is
+an Internet media type, which consists of a type, subtype, and optional parameters. For
+example, text/html; charset=UTF-8 specifies a type of “text,” a subtype of “html,” and
+a character encoding of UTF-8
+
+The most common media type for POST bodies is
+application/x-www-form-urlencoded , which is simply encoded name/value pairs
+multipart/form-data     file upload
+application/json		ajax request
+separated by ampersands
+
+The Request Object
+----------------------------------------
+The request object (which is normally passed to a callback, meaning you can name it
+whatever you want: it is common to name it req or request ) starts its life as an instance
+of http.IncomingMessage , a core Node object.
+req.headers and req.url node method
+	req.params
+	req.query
+	req.body
+	req.route
+	req.cookies / req.signedCookies
+	req.headers
+	req.accepts([types])
+	req.ip
+	req.path
+	req.host
+	req.xhr
+	req.protocol
+	req.secure	
+	req.url / req.originalUrl
+	req.acceptedLanguages
+
+The Response Object
+-----------------------------------------
+The response object (which is normally passed to a callback, meaning you can name it
+whatever you want: it is common to name it res , resp , or response ) starts its life as an
+instance of http.ServerResponse , a core Node object
+	res.status(code)
+	res.set(name, value)
+	res.cookie(name, value, [options]) , res.clearCookie(name, [options])
+	res.redirect([status], url)
+	res.send(body) , res.send(status, body)
+	res.json(json) , res.json(status, json)
+	res.jsonp(json) , res.jsonp(status, json)
+	res.type(type)
+	res.format(object)
+	res.attachment([filename]) , res.download(path, [filename], [callback])
+	res.sendFile(path, [options], [callback])
+	res.links(links)
+	res.locals , res.render(view, [locals], callback)
+
+Express source
+-----------------------------------------------
+lib/application.js
+	The main Express interface. If you want to understand how middleware is linked
+	in, or how views are rendered, this is the place to look.
+lib/express.js
+	This is a relatively short shell that extends Connect with the functionality in lib/
+	application.js, and returns a function that can be used with http.createServer to
+	actually run an Express app.
+lib/request.js
+	Extends Node’s http.IncomingMessage object to provide a robust request object.
+	For information about all the request object properties and methods, this is where
+	to look.
+lib/response.js
+	Extends Node’s http.ServerResponse object to provide the response object. For
+	information about response object properties and methods, this is where to look.
+lib/router/route.js
+	Provides basic routing support. While routing is central to your app, this file is less
+	than 200 lines long; you’ll find that it’s quite simple and elegant.
+
+app.set('view cache', true);
+require('express3-handlebars').create({ extname: '.hbs' })
+{{> partial_name}} //including parial in view
+
+Default form submission encoding
+	application/x-www-form-urlencoded
+
+It’s very important that you use a 303 (or 302) redirect, not a 301
+redirect in this instance. 301 redirects are “permanent,” meaning your
+browser may cache the redirection destination. If you use a 301 redi‐
+rect and try to submit the form a second time, your browser may
+bypass the /process handler altogether and go directly to /thank-
+you since it correctly believes the redirect to be permanent. The 303
+redirect, on the other hand, tells your browser “Yes, your request is
+valid, and you can find your response here,” and does not cache the
+redirect destination.
