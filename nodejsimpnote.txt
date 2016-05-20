@@ -165,3 +165,53 @@ you since it correctly believes the redirect to be permanent. The 303
 redirect, on the other hand, tells your browser “Yes, your request is
 valid, and you can find your response here,” and does not cache the
 redirect destination.
+
+cookie
+	The idea of a cookie is simple: the server sends a bit of information, and the browser
+	stores it for some configurable period of time. It’s really up to the server what the par‐
+	ticular bit of information is: often it’s just a unique ID number that identifies a specific
+	browser so that the illusion of state can be maintained.
+
+	A category of attacks called cross-site scripting attacks (XSS) has sprung up in recent
+	years. One technique of XSS attacks involves malicious JavaScript modifying the
+	contents of cookies
+
+	Cookies are not magic: when the server wishes the client to store a
+	cookie, it sends a header called Set-Cookie containing name/value
+	pairs, and when a client sends a request to a server for which it has
+	cookies, it sends multiple Cookie request headers containing the val‐
+	ue of the cookies.
+
+	res.cookie('monster', 'nom nom');
+	res.cookie('signed_monster', 'nom nom', { signed: true });
+
+	var monster = req.cookies.monster;
+	var signedMonster = req.signedCookies.monster;
+
+	To delete a cookie, use req.clearCookie :
+	res.clearCookie('monster');
+session
+	Broadly speaking, there are two ways to implement sessions: store everything in the
+	cookie,called “cookie-based sessions.”cookie-session middleware
+
+	or store only a unique identifier in the cookie and everything else on the serv‐
+	er. 
+
+	The express-session middleware accepts a configuration object with the following
+	options:
+	key
+	The name of the cookie that will store the unique session identifier. Defaults to
+	connect.sid .
+	store
+	An instance of a session store. Defaults to an instance of MemoryStore , which is fine
+	for our current purposes. We’ll see how to use a database store in Chapter 13.
+	cookie
+	Cookie settings for the session cookie ( path , domain , secure , etc.). Regular cookie
+	defaults apply.
+
+	req.session.userName = 'Anonymous';
+var colorScheme = req.session.colorScheme || 'dark';
+
+	req.session.userName = null; // this sets 'userName' to null,
+// but doesn't remove it
+delete req.session.colorScheme; // this removes 'colorScheme'
