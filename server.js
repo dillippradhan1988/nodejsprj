@@ -61,9 +61,9 @@ function getWeatherData(){
 // middleware to add weather data to context
 app.use(function(req, res, next){
 	if(!res.locals.partials) 
-		res.locals.partials = {};
-	res.locals.partials.weatherContext = getWeatherData();
-	next();
+		res.locals.partials 				= 	{};
+		res.locals.partials.weatherContext 	= 	getWeatherData();
+		next();
 });
 
 app.get('/headers', function(req,res){
@@ -74,7 +74,8 @@ app.get('/headers', function(req,res){
 });
 
 app.get('/', function(req, res) {
-	res.render('home');
+	//res.render('home');
+	res.send('Home page');
 });
 
 app.get('/about',function(req,res){
