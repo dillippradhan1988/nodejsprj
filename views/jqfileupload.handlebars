@@ -1,0 +1,56 @@
+{{#section 'head'}}
+<style>
+	.btn-file {
+		position: relative;
+		overflow: hidden;
+	}
+	.btn-file input[type=file] {
+		position: absolute;
+		top: 0;
+		right: 0;
+		min-width: 100%;
+		min-height: 100%;
+		font-size: 999px;
+		text-align: right;
+		filter: alpha(opacity=0);
+		opacity: 0;
+		outline: none;
+		background: white;
+		cursor: inherit;
+		display: block;
+	}
+	</style>
+{{/section}}
+
+
+    
+    <div class="form-group">
+        <label for="fieldName" class="col-sm-2 control-label">Upload</label>
+        <div class="col-sm-4">
+            <input type="file" class="form-control" required accept="image/*" id="fieldPhoto" data-url="/upload" multiple name="photo">
+        </div>
+    </div>
+
+
+<div id="fileUploads">
+
+</div>
+
+{{#section 'jquery'}}
+	<script src="/plugins/jquery-file-upload/js/vendor/jquery.ui.widget.js"></script>
+	<script src="/plugins/jquery-file-upload/js/jquery.iframe-transport.js"></script>
+	<script src="/plugins/jquery-file-upload/js/jquery.fileupload.js"></script>
+	<script>
+		$(document).ready(function(){			
+			$('#fieldPhoto').fileupload({
+				dataType: 'json',
+				done: function(e, data){
+					$.each(data.result.files, function(index, file){alert(file.originalName)
+						var appndObj = '<div class="upload"><span class="glyphicon glyphicon-ok">'+file.originalName+'</span></div>';
+						$('#fileUploads').append(appndObj);
+					});
+				}
+			});
+		});
+	</script>
+{{/section}}
