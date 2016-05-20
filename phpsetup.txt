@@ -31,9 +31,12 @@ git --version
 git init
 git add -A chapter3.js //single addition
 git add -A //for all file & folder addition
-git commit -m "chapter 3." //for commit
+git commit -m "commit to git" //for commit
 git remote add origin https://github.com/dillippradhan1988/nodejsprj.git //for one time run
 git push -u origin master
+
+fot importing files & folder to local repository
+	git pull origin master
 
 
 
@@ -86,7 +89,7 @@ Run this command to install alien and other necessary packages:
 To convert a package from rpm to debian format, use this command syntax.
 	sudo alien packagename.rpm
 
-To install the package, you�ll use the dpkg utility, which is the internal package management tool behind debian and Ubuntu.
+To install the package, you?ll use the dpkg utility, which is the internal package management tool behind debian and Ubuntu.
 	sudo dpkg -i packagename.deb
 	
 
