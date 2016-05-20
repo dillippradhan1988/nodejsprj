@@ -75,7 +75,6 @@ app.get('/headers', function(req,res){
 
 app.get('/', function(req, res) {
 	res.render('home');
-	//res.send('Home page');
 });
 
 app.get('/about',function(req,res){
@@ -232,7 +231,7 @@ app.post('/contest/vacation-photo/:year/:month', function(req, res){
 //custom 404 page
 app.use(function(req,res,next){	
 	res.status(404);
-	res.render('400');
+	res.render('notfound');
 });
 
 //505 internal servel error
