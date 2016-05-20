@@ -3,6 +3,7 @@ var express			=	require('express');
 var fortune 		=	require('./lib/fortune.js');
 var bodyParser  	= 	require('body-parser');
 var formidable 		= 	require('formidable');
+var jqupload 		= 	require('jquery-file-upload-middleware');
 var app				=	express();
 
 //set up handlebars view engine
@@ -23,6 +24,7 @@ app.set('port',process.env.PORT || 3000);
 
 //static middleware used for adding static to project css,javascript etc
 app.use(express.static(__dirname + '/public'));
+
 
 // create application/json parser
 var jsonParser 			= 	bodyParser.json();
@@ -226,6 +228,24 @@ app.post('/contest/vacation-photo/:year/:month', function(req, res){
 		console.log(files);
 		res.redirect(303, '/thank-you');
 	});
+});
+
+app.get('/jqfileupload',function(req,res){
+	res.render('jqfileupload',{
+		layout:'sectionheadjquery'
+	});
+});
+// jQuery File Upload endpoint middleware
+app.use('/upload', function(req, res, next){
+    var now = Date.now();
+    jqupload.fileHandler({
+        uploadDir: function(){
+            return __dirname + '/public/uploads/' + now;
+        },
+        uploadUrl: function(){
+            return '/uploads/' + now;
+        },
+    })(req, res, next);
 });
 
 //custom 404 page

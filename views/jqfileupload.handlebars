@@ -45,7 +45,7 @@
 			$('#fieldPhoto').fileupload({
 				dataType: 'json',
 				done: function(e, data){
-					$.each(data.result.files, function(index, file){alert(file.originalName)
+					$.each(data.result.files, function(index, file){
 						var appndObj = '<div class="upload"><span class="glyphicon glyphicon-ok">'+file.originalName+'</span></div>';
 						$('#fileUploads').append(appndObj);
 					});
