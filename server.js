@@ -74,8 +74,8 @@ app.get('/headers', function(req,res){
 });
 
 app.get('/', function(req, res) {
-	//res.render('home');
-	res.send('Home page');
+	res.render('home');
+	//res.send('Home page');
 });
 
 app.get('/about',function(req,res){
