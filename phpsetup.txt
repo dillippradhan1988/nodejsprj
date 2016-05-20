@@ -1,0 +1,126 @@
+Composer Setup
+--------------------
+php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+php -r "if (hash_file('SHA384', 'composer-setup.php') === '92102166af5abdb03f49ce52a40591073a7b859a86e8ff13338cf7db58a19f7844fbc0bb79b2773bf30791e935dbd938') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;"
+php composer-setup.php
+php -r "unlink('composer-setup.php');"
+sudo mv composer.phar /usr/local/bin/composer
+
+Laravel installation
+-------------------
+composer create-project --prefer-dist laravel/laravel
+
+Giving Permission
+------------------
+chmod 0777 storage/
+chmod 0777 cache/
+
+Move public folder content to root
+then change index.php file
+require __DIR__.'/../bootstrap/autoload.php'; to require __DIR__.'/bootstrap/autoload.php';
+$app = require_once __DIR__.'/../bootstrap/app.php'; to $app = require_once __DIR__.'/bootstrap/app.php';
+
+php artisan make:auth
+php artisan migrate
+
+
+git commands
+------------------
+look for the module in the node_modules directory
+git --version
+git init
+git add -A chapter3.js //single addition
+git add -A //for all file & folder addition
+git commit -m "chapter 3." //for commit
+git remote add origin https://github.com/dillippradhan1988/nodejsprj.git //for one time run
+git push -u origin master
+
+
+
+Node Installation
+-------------------
+cd /tmp
+wget http://nodejs.org/dist/v0.12.0/node-v0.12.0-linux-x64.tar.gz
+tar xvfz node-v0.12.0-linux-x64.tar.gz
+sudo mkdir -p /usr/local/nodejs
+sudo mv node-v0.12.0-linux-x64/* /usr/local/nodejs
+export PATH=$PATH:/usr/local/nodejs/bin
+
+to create file
+	sudo nano main.js
+to asve file 
+	F2 Y Enter key
+	
+	
+	
+npm commands
+------------
+Running npm install will install the named package(s) in the node_modules directory.
+If you specify the --save flag, it will update the package.json file.
+	npm --version
+	npm install //to install all modules present in package.json
+	npm install -save <Module Name>
+	npm uninstall -save <Module Name>
+	npm update -save <Module Name>
+	npm search -save <Module Name>
+	
+	npm update --save
+
+
+
+Ubuntu Command
+------------------------
+to install zip package from online
+	sudo apt-get install zip
+	sudo apt-get install unzip
+to install package from offline "packagename.deb" file
+	sudo dpkg -i packagename.deb
+
+
+	
+How to instal package from rpm in ubuntu
+---------------------------------------
+Run this command to install alien and other necessary packages:
+	sudo apt-get install alien dpkg-dev debhelper build-essential
+
+To convert a package from rpm to debian format, use this command syntax.
+	sudo alien packagename.rpm
+
+To install the package, you�ll use the dpkg utility, which is the internal package management tool behind debian and Ubuntu.
+	sudo dpkg -i packagename.deb
+	
+
+	
+Cloud 9
+---------
+dillip9090
+*ei7676Iq#
+
+
+
+Netbean Installation
+---------------------
+Step 1: Install JAVA
+	$ sudo add-apt-repository ppa:webupd8team/java
+	$ sudo apt-get update
+	$ sudo apt-get install oracle-java8-installer
+	After installing verify Java installed successfully on your system.
+
+	$ java -version
+		java version "1.8.0_60"
+		
+Step 2: Install Java(TM) SE Runtime Environment
+
+Java(TM) SE Runtime Environment (build 1.8.0_60-b27)
+Java HotSpot(TM) 64-Bit Server VM (build 25.60-b23, mixed mode)
+Step 2: Download NetBeans (PHP) Installer
+
+After installing/verifying java on your system, download NetBeans for PHP latest installer file, For following commands, we are running as root user.
+
+$ sudo su -
+# wget http://download.netbeans.org/netbeans/8.0.2/final/bundles/netbeans-8.0.2-php-linux.sh
+You can download full version of NetBeans from official website or using this link. After complete download of installer file, make file executable and run it.
+
+# chmod +x netbeans-8.0.2-php-linux.sh
+# sh netbeans-8.0.2-php-linux.sh
+Currently (27/Aug/2015) NetBeans 8.0.2 version is available to install, For more recent versions, visit https://netbeans.org/ official site.
