@@ -33,8 +33,9 @@ git add -A chapter3.js //single addition
 git add -A //for all file & folder addition
 git commit -m "commit to git" //for commit
 git remote add origin https://github.com/dillippradhan1988/nodejsprj.git //for one time run
-git push -u origin master
 
+fot exporting files & folder to local repository
+	git push -u origin master
 fot importing files & folder to local repository
 	git pull origin master
 
