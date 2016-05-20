@@ -157,3 +157,20 @@ lib/response.js
 lib/router/route.js
 	Provides basic routing support. While routing is central to your app, this file is less
 	than 200 lines long; you’ll find that it’s quite simple and elegant.
+
+app.set('view cache', true);
+require('express3-handlebars').create({ extname: '.hbs' })
+{{> partial_name}} //including parial in view
+
+Default form submission encoding
+	application/x-www-form-urlencoded
+
+It’s very important that you use a 303 (or 302) redirect, not a 301
+redirect in this instance. 301 redirects are “permanent,” meaning your
+browser may cache the redirection destination. If you use a 301 redi‐
+rect and try to submit the form a second time, your browser may
+bypass the /process handler altogether and go directly to /thank-
+you since it correctly believes the redirect to be permanent. The 303
+redirect, on the other hand, tells your browser “Yes, your request is
+valid, and you can find your response here,” and does not cache the
+redirect destination.
