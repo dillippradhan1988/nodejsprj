@@ -358,3 +358,27 @@ Mial
 		
 		The difference between an attachment and an alternative is the fact that attachments are placed into multipart/mixed or multipart/related parts of the message 
 		white alternatives are placed into multipart/alternative part.
+		
+Execution Environments		
+		Express supports the concept of execution environments: a way to run your application
+		in production, development, or test mode.
+		
+Scaling Your Website
+	These days, scaling usually means one of two things: scaling up or scaling out. Scaling
+	up refers to making servers more powerful: faster CPUs, better architecture, more cores,
+	more memory, etc. Scaling out, on the other hand, simply means more servers. With
+	the increased poularity of cloud computing and the ubiquity of virtualization, server
+	
+Environment-Specific Configuration	
+	NODE_ENV=development node server.js
+	NODE_ENV=production node server.js
+	NODE_ENV=test node server.js
+	
+Scaling Out with App Clusters
+	Node itself supports app clusters, a simple, single-server form of scaling out. With app
+	clusters, you can create an independent server for each core (CPU) on the system (having
+	more servers than the number of cores will not improve the performance of your
+	app). App clusters are good for two reasons: first, they can help maximize the performance
+	of a given server (the hardware, or virtual machine), and second, it’s a lowoverhead
+	way to test your app under parallel conditions.
+	

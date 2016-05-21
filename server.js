@@ -25,8 +25,21 @@ app.set('view engine','handlebars');
 
 app.set('port',process.env.PORT || 3000);
 
+
 //static middleware used for adding static to project css,javascript etc
 app.use(express.static(__dirname + '/public'));
+
+// logging
+switch(app.get('env')){
+    case 'development':
+    	// compact, colorful dev logging
+    	app.use(require('morgan')('dev'));
+        break;
+    case 'production':
+        // module 'express-logger' supports daily log rotation
+        app.use(require('express-logger')({ path: __dirname + '/views/log/requests.log'}));
+        break;
+}
 
 //cookie-parser to set a cookie or a signed cookie anywhere you have access
 //to a request object
@@ -541,6 +554,7 @@ app.use(function(err,req,res,next){
 });
 
 app.listen(app.get('port'), function(){
-	console.log( 'Express started on http://localhost:' +
-	app.get('port') + '; press Ctrl-C to terminate.' );
+	console.log( 'Express started in ' + app.get('env') +
+	' mode on http://localhost:' + app.get('port') +
+	'; press Ctrl-C to terminate.' );
 });
