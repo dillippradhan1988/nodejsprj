@@ -109,6 +109,9 @@ switch(app.get('env')){
         break;
 }
 
+var MongoSessionStore = require('session-mongoose')(require('connect'));
+var sessionStore = new MongoSessionStore({ url: credentials.mongo[app.get('env')].connectionString });
+
 //cookie-parser to set a cookie or a signed cookie anywhere you have access
 //to a request object
 app.use(require('cookie-parser')(credentials.cookieSecret));
@@ -116,6 +119,7 @@ app.use(require('express-session')({
 	resave: false,
     saveUninitialized: false,
     secret: credentials.cookieSecret,
+    store: sessionStore
 }));
 
 // flash message middleware
@@ -597,6 +601,11 @@ app.post('/notify-me-when-in-season', urlencodedParser,function(req, res){
 	        return res.redirect(303, '/vacations');
 	    }
 	);
+});
+
+app.get('/set-currency/:currency', function(req,res){
+    req.session.currency = req.params.currency;
+    return res.redirect(303, '/vacations');
 });
 
 var cartValidation = require('./lib/cartValidation.js');
