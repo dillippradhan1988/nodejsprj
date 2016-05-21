@@ -5,6 +5,8 @@ var credentials 	= 	require('./credentials.js');
 var bodyParser  	= 	require('body-parser');
 var formidable 		= 	require('formidable');
 var jqupload 		= 	require('jquery-file-upload-middleware');
+var nodemailer 		= 	require('nodemailer');
+
 var app				=	express();
 
 //set up handlebars view engine
@@ -407,7 +409,7 @@ app.get('/adventures/:subcat/:name', function(req, res, next){
 	Product.findOne({ category: 'adventure', slug: req.params.subcat + '/' + req.params.name  }, function(err, adventure){
 		if(err) return next(err);
 		if(!adventure) return next();
-		res.render('adventure', { adventure: adventure });
+		res.render('adventure', { adventure: adventure});
 	});
 });
 
@@ -417,6 +419,7 @@ app.use(cartValidation.checkWaivers);
 app.use(cartValidation.checkGuestCounts);
 
 app.post('/cart/add',urlencodedParser, function(req, res, next){
+	//console.log("server.js"+req.session.cart);
 	var cart = req.session.cart || (req.session.cart = []);
 	Product.findOne({ sku: req.body.sku }, function(err, product){
 		if(err) return next(err);
@@ -425,6 +428,7 @@ app.post('/cart/add',urlencodedParser, function(req, res, next){
 			product: product,
 			guests: req.body.guests || 0,
 		});
+		//console.log("server.js afte assign"+req.session.cart);
 		res.redirect(303, '/cart');
 	});
 });
@@ -432,6 +436,95 @@ app.post('/cart/add',urlencodedParser, function(req, res, next){
 app.get('/cart', function(req, res){
 	var cart = req.session.cart || (req.session.cart = []);
 	res.render('cart', { cart: cart });
+});
+
+app.get('/cart/checkout', function(req, res, next){
+	var cart = req.session.cart;
+	console.log(cart);
+	if(!cart) next();
+	res.render('cart-checkout');
+});
+
+app.post('/cart/checkout',urlencodedParser, function(req, res){
+	var cart = req.session.cart;
+	if(!cart) next(new Error('Cart does not exist.'));
+	var name = req.body.name || '', email = req.body.email || '';
+	// input validation
+	if(!email.match(VALID_EMAIL_REGEX)) return res.next(new Error('Invalid email address.'));
+	// assign a random cart ID; normally we would use a database ID here
+	cart.number = Math.random().toString().replace(/^0\.0*/, '');
+	cart.billing = {
+		name: name,
+		email: email,
+	};
+    res.render('email/cart-thank-you', 
+    	{ layout: null, cart: cart }, function(err,html){
+	        if( err ) console.log('error in email template');
+	        /*emailService.send(cart.billing.email,
+	        	'Thank you for booking your trip with Meadowlark Travel!',
+	        	html);*/
+	    }
+    );
+    res.render('cart-thankyou', { cart: cart });
+});
+
+app.get('/email/cart/thank-you', function(req, res){
+	res.render('email/cart-thank-you', { cart: req.session.cart, layout: null });
+});
+
+app.get('/cart-thankyou', function(req, res){
+	res.render('cart-thank-you', { cart: req.session.cart });
+});
+
+
+
+//using Mail Submission Agent (MSA) like Gmail
+var smtpConfig 		= 	{
+		service: 'gmail',
+	    host: 'smtp.gmail.com',
+	    port: 465,
+	    //secure: true, // use SSL
+	    auth: {
+	        user: credentials.gmail.user,
+	        pass: credentials.gmail.password
+	    }
+};
+
+var mailTransporter = 	nodemailer.createTransport(smtpConfig);
+
+app.get('/sendmail',function(req,res){
+	// verify connection configuration
+	mailTransporter.verify(function(error, success) {
+	   if (error) {
+	        console.log(error);
+	   } else {
+	        console.log('Server is ready to take our messages');
+	   }
+	});
+
+	// setup e-mail data with unicode symbols
+	var mailOptions = {
+	    from: '"Diillip 👥" <dillippradhan1988@gmail.comm>', // sender address
+	    to: 'dillippradhan1988@gmail.com', // list of receivers
+	    subject: 'Hello ✔', // Subject line
+	    text: 'Hello world 🐴', // plaintext body
+	    html: '<b>Hello world 🐴</b>', // html body
+	    attachments: [
+	        {   // utf-8 string as an attachment
+	            filename: 'text1.txt',
+	            content: 'hello world!'
+	        }
+        ]
+	};
+	
+	// send mail with defined transport object
+	mailTransporter.sendMail(mailOptions, function(error, info){
+	    if(error){
+	        return console.log(error);
+	    }
+	    console.log('Message sent: ' + info.response);
+	    res.send('Message sent: ' + info.response);
+	});
 });
 
 //custom 404 page

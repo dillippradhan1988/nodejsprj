@@ -213,8 +213,8 @@ session
 var colorScheme = req.session.colorScheme || 'dark';
 
 	req.session.userName = null; // this sets 'userName' to null,
-// but doesn't remove it
-delete req.session.colorScheme; // this removes 'colorScheme'
+	// but doesn't remove it
+	delete req.session.colorScheme; // this removes 'colorScheme'
 
 middleware
 	Conceptually, middleware is a way to encapsulate functionality: specifically, function‐
@@ -223,8 +223,8 @@ middleware
 	“next” function, which will be explained shortly. (There is also a form that takes four
 	arguments, for error handling, which will be covered at the end of this chapter.)
 
-In an Express app, you insert middleware into the pipeline by
-calling app.use .
+	In an Express app, you insert middleware into the pipeline by
+	calling app.use .
 
 	. If there are two or three parameters, the first two
 	parameters are the request and response objects, and the third paramater is the
@@ -242,6 +242,119 @@ calling app.use .
 	but any client responses they send will be ignored.	
 
 	In the previous example, we have a middleware aborting early with
-the statement return next() . Express doesn’t expect middleware to
-return a value (and it doesn’t do anything with any return values), so
-this is just a shortened way of writing next(); return; .
+	the statement return next() . Express doesn’t expect middleware to
+	return a value (and it doesn’t do anything with any return values), so
+	this is just a shortened way of writing next(); return; .
+
+Mial
+	SMTP, MSAs, and MTAs
+		The lingua franca for sending email is the Simple Mail Transfer Protocol (SMTP). While
+		it is possible to use SMTP to send an email directly to the recipient’s mail server, this is
+		generally a very bad idea: unless you are a “trusted sender” like Google or Yahoo!,
+		chances are your email will be be tossed directly into the spam bin. 
+		
+		Better to use a Mail Submission Agent (MSA), which will deliver the email through
+		trusted channels, reducing the chance that your email will be marked as spam.
+		In addition to ensuring that your email arrives, MSAs handle nuisances like 
+		temporary outages and bounced emails.
+		
+		The final piece of the equation is the Mail Transfer Agent (MTA), which is the service
+		that actually sends the email to its final destination
+	Receiving Email
+		Unfortunately, receiving email is much more involved and will not be covered in this
+		book. If this is functionality you need, you should look into Andris Reinman’s SimpleSMTP
+		or Haraka.
+		https://github.com/andris9/simplesmtp
+		http://haraka.github.io/
+	Email Headers
+		An email message consists of two parts: the header and the body (very much like an
+		HTTP request). The header contains information about the email: who it’s from, who
+		it’s addressed to, the date it was received, the subject, and more.
+		
+		The headers give you all the information about how the
+		email got to you; every server and MTA that the email passed through will be listed in
+		the header.
+		
+		When you specify a “from” address other than the account
+		from which you’re sending, it’s often referred to as “spoofing.”
+	Email Formats
+		email can either be plaintext (Unicode) or HTML.
+		
+		http://kb.mailchimp.com/campaigns/ways-to-build/about-html-email
+	
+	Syntax:
+		var mailTransporter = nodemailer.createTransport(options[, defaults]);
+	
+	//node mailer package
+		var nodemailer 		= 	require('nodemailer');
+	
+	//3 type SMTP config setting (options)
+		var smtpConfig = {
+		    host: 'smtp.gmail.com',
+		    port: 465,
+		    secure: true, // use SSL
+		    auth: {
+		        user: 'user@gmail.com',
+		        pass: 'pass'
+		    }
+		};
+		
+		var poolConfig = {
+		    pool: true,
+		    host: 'smtp.gmail.com',
+		    port: 465,
+		    secure: true, // use SSL
+		    auth: {
+		        user: 'user@gmail.com',
+		        pass: 'pass'
+		    }
+		};
+		
+		var directConfig = {
+		    name: 'hostname' // must be the same that can be reverse resolved by DNS for your IP
+		};
+	
+	Alternatively you could use connection url. Use smtp:, smtps: or direct: as the protocol.
+
+		var smtpConfig = 'smtps://user%40gmail.com:pass@smtp.gmail.com';
+		var poolConfig = 'smtps://user%40gmail.com:pass@smtp.gmail.com/?pool=true';
+		var directConfig = 'direct:?name=hostname';
+	
+	
+	
+	Example
+		//using Mail Submission Agent (MSA) like Gmail
+		var smtpConfig 		= 	{
+			    host: 'smtp.gmail.com',
+			    port: 465,
+			    secure: true, // use SSL
+			    auth: {
+			        user: credentials.gmail.user,
+			        pass: credentials.gmail.password
+			    }
+		};
+		
+		var mailTransporter = 	nodemailer.createTransport(smtpConfig);
+		
+		app.get('/sendmail',function(req,res){
+			// setup e-mail data with unicode symbols
+			var mailOptions = {
+			    from: '"Fred Foo ??" <foo@blurdybloop.com>', // sender address
+			    to: 'bar@blurdybloop.com, baz@blurdybloop.com', // list of receivers
+			    subject: 'Hello ?', // Subject line
+			    text: 'Hello world ??', // plaintext body
+			    html: '<b>Hello world ??</b>' // html body
+			};
+			
+			// send mail with defined transport object
+			mailTransporter.sendMail(mailOptions, function(error, info){
+			    if(error){
+			        return console.log(error);
+			    }
+			    console.log('Message sent: ' + info.response);
+			    res.send('Mail sent successfully.');
+			});
+		});
+		
+		The difference between an attachment and an alternative is the fact that attachments are placed into multipart/mixed or multipart/related parts of the message 
+		white alternatives are placed into multipart/alternative part.

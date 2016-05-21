@@ -21,6 +21,7 @@
     "express-handlebars": "^3.0.0",
     "express-session": "^1.13.0",
     "formidable": "^1.0.17",
-    "jquery-file-upload-middleware": "^0.1.7"
+    "jquery-file-upload-middleware": "^0.1.7",
+    "nodemailer": "^2.4.1"
   }
 }
