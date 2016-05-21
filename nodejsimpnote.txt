@@ -382,3 +382,27 @@ Scaling Out with App Clusters
 	of a given server (the hardware, or virtual machine), and second, it’s a lowoverhead
 	way to test your app under parallel conditions.
 	
+Scaling Out with Single Servers
+	use cluster
+Scaling Out with Multiple Servers
+	use proxy server or reverse proxy or forward-facing proxy
+
+If you do configure a proxy server, make sure you tell Express that you are using a proxy
+and that it should be trusted
+	app.enable('trust proxy');
+
+Third-Party Uptime Monitors
+	Pingdom and Site24x7.
+
+Filesystem Persistence
+	Filesystem persistence has some drawbacks. In particular, it doesn’t scale well: the mi‐
+	nute you need more than one server to meet traffic demands, you will run into problems
+	with filesystem persistence, unless all of your servers have access to a shared filesystem.
+	Also, because flat files have no inherent structure, the burden of locating, sorting, and
+	filtering data will be on your application. For these reasons, you should favor databases
+	over filesystems for storing data. The one exception is storing binary files, such as im‐
+	ages, audio files, or videos. While many databases can handle this type of data, they
+	rarely do so more efficiently than a filesystem (though information about the binary
+	files is usually stored in a database to enable searching, sorting, and filtering).
+
+nodemongoprejdb

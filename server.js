@@ -1,3 +1,4 @@
+var http 			=	require('http');
 var express			=	require('express');
 //including custom module
 var fortune 		=	require('./lib/fortune.js');
@@ -6,7 +7,7 @@ var bodyParser  	= 	require('body-parser');
 var formidable 		= 	require('formidable');
 var jqupload 		= 	require('jquery-file-upload-middleware');
 var nodemailer 		= 	require('nodemailer');
-
+var Vacation 		= 	require('./models/vacation.js');
 var app				=	express();
 
 //set up handlebars view engine
@@ -29,6 +30,72 @@ app.set('port',process.env.PORT || 3000);
 //static middleware used for adding static to project css,javascript etc
 app.use(express.static(__dirname + '/public'));
 
+// database configuration
+var mongoose = require('mongoose');
+var options = {
+    server: {
+       socketOptions: { keepAlive: 1 } 
+    }
+};
+switch(app.get('env')){
+    case 'development':
+        mongoose.connect(credentials.mongo.development.connectionString, options);
+        break;
+    case 'production':
+        mongoose.connect(credentials.mongo.production.connectionString, options);
+        break;
+    default:
+        throw new Error('Unknown execution environment: ' + app.get('env'));
+}
+// initialize vacations
+Vacation.find(function(err, vacations){
+    if(vacations.length) return;
+
+    new Vacation({
+        name: 'Hood River Day Trip',
+        slug: 'hood-river-day-trip',
+        category: 'Day Trip',
+        sku: 'HR199',
+        description: 'Spend a day sailing on the Columbia and ' + 
+            'enjoying craft beers in Hood River!',
+        priceInCents: 9995,
+        tags: ['day trip', 'hood river', 'sailing', 'windsurfing', 'breweries'],
+        inSeason: true,
+        maximumGuests: 16,
+        available: true,
+        packagesSold: 0,
+    }).save();
+
+    new Vacation({
+        name: 'Oregon Coast Getaway',
+        slug: 'oregon-coast-getaway',
+        category: 'Weekend Getaway',
+        sku: 'OC39',
+        description: 'Enjoy the ocean air and quaint coastal towns!',
+        priceInCents: 269995,
+        tags: ['weekend getaway', 'oregon coast', 'beachcombing'],
+        inSeason: false,
+        maximumGuests: 8,
+        available: true,
+        packagesSold: 0,
+    }).save();
+
+    new Vacation({
+        name: 'Rock Climbing in Bend',
+        slug: 'rock-climbing-in-bend',
+        category: 'Adventure',
+        sku: 'B99',
+        description: 'Experience the thrill of rock climbing in the high desert.',
+        priceInCents: 289995,
+        tags: ['weekend getaway', 'bend', 'high desert', 'rock climbing', 'hiking', 'skiing'],
+        inSeason: true,
+        requiresWaiver: true,
+        maximumGuests: 4,
+        available: false,
+        packagesSold: 0,
+        notes: 'The tour guide is currently recovering from a skiing accident.',
+    }).save();
+});
 // logging
 switch(app.get('env')){
     case 'development':
@@ -106,6 +173,18 @@ app.get('/headers', function(req,res){
 	var s = '';
 	for(var name in req.headers) s += name + ': ' + req.headers[name] + '\n';
 	res.send(s);
+});
+
+/*
+app.use(function(req,res,next){
+    var cluster = require('cluster');
+    if(cluster.isWorker) console.log('Worker %d received request',cluster.worker.id);
+});
+*/
+app.get('/epic-fail', function(req, res){
+	process.nextTick(function(){
+		throw new Error('Kaboom!');
+	});
 });
 
 app.get('/', function(req, res) {
@@ -426,6 +505,69 @@ app.get('/adventures/:subcat/:name', function(req, res, next){
 	});
 });
 
+app.get('/vacation/:vacation', function(req, res, next){
+	Vacation.findOne({ slug: req.params.vacation }, function(err, vacation){
+		if(err) return next(err);
+		if(!vacation) return next();
+		res.render('vacation', { vacation: vacation });
+	});
+});
+
+function convertFromUSD(value, currency){
+    switch(currency){
+    	case 'USD': return value * 1;
+        case 'GBP': return value * 0.6;
+        case 'BTC': return value * 0.0023707918444761;
+        default: return NaN;
+    }
+}
+
+app.get('/vacations', function(req, res){
+    Vacation.find({ available: true }, function(err, vacations){
+    	var currency = req.session.currency || 'USD';
+        var context = {
+            currency: currency,
+            vacations: vacations.map(function(vacation){
+                return {
+                    sku: vacation.sku,
+                    name: vacation.name,
+                    description: vacation.description,
+                    inSeason: vacation.inSeason,
+                    price: convertFromUSD(vacation.priceInCents/100, currency),
+                    qty: vacation.qty,
+                };
+            })
+        };
+        switch(currency){
+	    	case 'USD': context.currencyUSD = 'selected'; break;
+	        case 'GBP': context.currencyGBP = 'selected'; break;
+	        case 'BTC': context.currencyBTC = 'selected'; break;
+	    }
+        res.render('vacations', context);
+    });
+});
+
+app.post('/vacations', function(req, res){
+    Vacation.findOne({ sku: req.body.purchaseSku }, function(err, vacation){
+        if(err || !vacation) {
+            req.session.flash = {
+                type: 'warning',
+                intro: 'Ooops!',
+                message: 'Something went wrong with your reservation; ' +
+                    'please <a href="/contact">contact us</a>.',
+            };
+            return res.redirect(303, '/vacations');
+        }
+        vacation.packagesSold++;
+        vacation.save();
+        req.session.flash = {
+            type: 'success',
+            intro: 'Thank you!',
+            message: 'Your vacation has been booked.',
+        };
+        res.redirect(303, '/vacations');
+    });
+});
 var cartValidation = require('./lib/cartValidation.js');
 
 app.use(cartValidation.checkWaivers);
@@ -553,8 +695,26 @@ app.use(function(err,req,res,next){
 	res.render('500');
 });
 
-app.listen(app.get('port'), function(){
+/*app.listen(app.get('port'), function(){
 	console.log( 'Express started in ' + app.get('env') +
 	' mode on http://localhost:' + app.get('port') +
 	'; press Ctrl-C to terminate.' );
-});
+});*/
+
+var server;
+
+function startServer() {
+    server = http.createServer(app).listen(app.get('port'), function(){
+      console.log( 'Express started in ' + app.get('env') +
+        ' mode on http://localhost:' + app.get('port') +
+        '; press Ctrl-C to terminate.' );
+    });
+}
+
+if(require.main === module){
+    // application run directly; start app server
+    startServer();
+} else {
+    // application imported as a module via "require": export function to create server
+    module.exports = startServer;
+}
