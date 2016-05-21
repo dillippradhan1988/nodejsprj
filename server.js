@@ -167,7 +167,7 @@ app.get('/api/tours', function(req, res){
 // API that updates a tour and returns JSON; params are passed using querystring
 app.put('/api/tours/:id', function(req, res){
 	var p = tours.some(function(p){ 
-		return p.id == req.params.id
+		return p.id == req.params.id;
 	});
 	if( p ) {
 		if( req.query.name ) p.name = req.query.name;
@@ -181,7 +181,7 @@ app.put('/api/tours/:id', function(req, res){
 // API that deletes a product
 app.delete('/api/tours/:id', function(req, res){
 	var i;
-	for( var i=tours.length-1; i>=0; i-- )
+	for( i=tours.length-1; i>=0; i-- )
 		if( tours[i].id == req.params.id ) break;
 		if( i>=0 ) {
 			tours.splice(i, 1);
@@ -254,6 +254,7 @@ app.get('/jqfileupload',function(req,res){
 	});
 });
 // jQuery File Upload endpoint middleware
+
 app.use('/upload', function(req, res, next){
     var now = Date.now();
     jqupload.fileHandler({
@@ -270,9 +271,11 @@ app.use('/upload', function(req, res, next){
 app.get('/sessionflashmsg', function(req, res){
 	res.render('sessionflashmsg');
 });
+
 // for now, we're mocking NewsletterSignup:
 function NewsletterSignup(){
 }
+
 NewsletterSignup.prototype.save = function(cb){
 	cb();
 };
@@ -283,7 +286,6 @@ app.post('/sessionflashmsg',urlencodedParser, function(req, res){
 	if (!req.body) {
 		res.status(404);
 	}
-		
 	var fullname = req.body.fullname || '', email = req.body.email || '';
 	// input validation
 	if(!email.match(VALID_EMAIL_REGEX)) {
