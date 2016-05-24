@@ -5,4 +5,3 @@ node_modules
 public/uploads
 #credentials.js
 views/log
-data
