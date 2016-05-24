@@ -361,7 +361,7 @@ Mial
 		
 Execution Environments		
 		Express supports the concept of execution environments: a way to run your application
-		in production, development, or test mode.
+		in production, development, or test mode or stage mode or preview mode.
 		
 Scaling Your Website
 	These days, scaling usually means one of two things: scaling up or scaling out. Scaling
@@ -373,6 +373,8 @@ Environment-Specific Configuration
 	NODE_ENV=development node server.js
 	NODE_ENV=production node server.js
 	NODE_ENV=test node server.js
+	NODE_ENV=stage node server.js
+	NODE_ENV=preview node server.js
 	
 Scaling Out with App Clusters
 	Node itself supports app clusters, a simple, single-server form of scaling out. With app
@@ -406,3 +408,192 @@ Filesystem Persistence
 	files is usually stored in a database to enable searching, sorting, and filtering).
 
 nodemongoprejdb
+
+
+
+Middleware
+-----------------------------------------------------------------------
+A.Working with Middleware
+	defination
+		middleware is a function with three arguments
+			1.request (req)
+			2.response (res) 
+			3.next
+	purpose
+		1.reuse code within their applications
+		2.share it with others in the form of NPM modules
+	syntax
+		var myMiddleware = function (req, res, next) {
+			// Do something with req and/or res
+			next();
+		};
+
+
+B.Applying Middleware
+	app.use() method from the Express.js API
+	The method app.use() has one optional string parameter path and 
+	one mandatory function parameter callback
+
+	var myMiddleware = function (req, res, next) {
+		// Do something with req and/or res
+		next();
+	};
+
+	app.use('/admin',function (req, res, next) {
+		// Do something with req and/or res
+		next();
+	});
+	app.use(function (req, res, next) {
+		// Do something with req and/or res
+		next();
+	});		
+	or
+	app.use('/admin',myMiddleware);
+	app.use(myMiddleware);
+
+	Static middleware's NPM module is serve-static.
+
+
+C.Essential Middleware
+	npm install compression@1.0.11 --save
+		var compression = require('compression');
+		// ... Typical Express.js set up...
+		app.use(compression()); //1 optional param
+
+	npm install morgan@1.2.2 --save
+		var logger = require('morgan');
+		// ... Configurations
+		app.use(logger('common'));//Morgan takes either an options object or a format string(common,dev)
+
+	npm install body-parser@1.6.1
+		body-parser module has the following distinct middleware
+		1.json(): Processes JSON data; e.g., {"name": "value", "name2":
+		"value"}
+		2.urlencoded(): Processes URL-encoded data; e.g.,
+		name=value&name2=value2
+
+	npm install cookie-parser@1.3.2
+		var cookieParser = require('cookie-parser');
+		// ... Some Express.js set up
+		app.use(cookieParser('random string',path));//optional
+		or
+		app.use(cookieParser('cats and dogs can learn JavaScript')); //or a random string
+
+	npm install express-session@1.7.6 --save
+		key: Cookie name, defaulting to connect.sid
+		store: Session store instance, usually a Redis object 
+		secret: Used to sign the session cookie, to prevent tampering
+		others
+
+	npm install csurf@1.6.0 --save
+		var csrf = require('csurf');
+		// ... Instantiate Express.js application
+		app.use(csrf());
+
+
+Routing
+------------------------------------------------------------------------------------------
+A.To review, the typical structure of an Express.js app (which is usually a server.js or
+  app.js file) roughly consists of these parts, in the order shown:
+
+	1.Dependencies: A set of statements to import dependencies
+
+	2.Instantiations: A set of statements to create objects
+
+	3.Configurations: A set of statements to configure system and 
+	  custom settings
+
+	4.Middleware: A set of statements that is executed for every
+	  incoming request
+
+	5.Routes: A set of statements that defines server routes,
+	  endpoints, and pages
+
+	6.Bootup: A set of statements that starts the server and makes it
+	  listen on a specific port for incoming requests
+	
+B.The following are the most commonly used Representational State Transfer (REST)
+  server architecture HTTP methods and their counterpart methods in Express.js along
+  with the brief meaning:
+
+	1.GET: app.get()—Retrieves an entity or a list of entities
+
+	2.HEAD: app.head()—Same as GET, only without the body
+
+	3.POST: app.post()—Submits a new entity
+
+	4.PUT: app.put()—Updates an entity by complete replacement
+
+	5.PATCH: app.patch()—Updates an entity partially
+
+	6.DELETE: app.delete() and app.del()—Deletes an
+	  existing entity
+
+	7.OPTIONS: app.options()—Retrieves the capabilities of
+	  the server
+
+
+
+C.This is useful for abstracting certain modules based on the business logic that they
+  perform. For example, all /users/* routes can be defined in one router, and all /posts/*
+  routes can be defined in another.
+
+	var express = require('express');
+	var router = express.Router(options);//
+	// ... Define routes
+	app.use('/blog', router);
+
+	where options is an object that can have following properties:
+		1.caseSensitive: Boolean indicating whether to treat routes with
+		the same name but different letter case as different, false by
+		default; e.g., if it’s set to false, then /Users is the same as /users.
+
+		2.strict: Boolean indicating whether to treat routes with the same
+		name but with or without a trailing slash as different, false by
+		default; e.g., if it’s set to false, then /users is the same as /users/.
+
+
+Request Object
+----------------------------------------------------------------------------------------------
+A.The Express.js request object (req for short) is a wrapper for a core Node.js http.request
+  object which is the Node.js representation of the incoming HTTP(S) request. In web, the
+  request has these parts:
+	1.Method: GET, POST or others
+	2.URI: the location for example http://hackhall.com/api/posts/
+	3.Headers: host: www.hackhall.com
+	4.Body: content in the urlencoded, JSON or other formats
+
+B.list of methods and objects of the Express.js request object that we’ll cover
+  in this chapter:
+	1.request.query: query string parameters
+	2.request.params: URL parameters
+	3.request.body: request body data
+	4.request.route: the route path
+	5.request.cookies: cookie data
+	6.request.signedCookies: signed cookie data
+	7.request.header() and request.get(): request headers
+
+C.Signing a cookie does not hide or encrypt the cookie. It’s a simple way to
+  prevent tampering by applying a private value. Signing (or hashing) is not the same as
+  encryption. The former is for identification and tampering prevention, and the latter is for
+  hiding the content from unauthorized recipients
+
+
+Responce Object
+----------------------------------------------------------------------------------------------
+A.list of methods and objects of the Express.js response object that we’ll cover
+  in this chapter:
+	1.response.render()
+	2.response.locals
+	3.response.set()
+	4.response.status()
+		200: OK
+		201: Created
+		301: Moved Permanently
+		401: Unauthorized
+		404: Not Found
+		500: Internal Server Error
+	5.response.send()
+	6.response.json()
+	7.response.jsonp()
+	8.response.redirect()
