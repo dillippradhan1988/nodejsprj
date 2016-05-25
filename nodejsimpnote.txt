@@ -1,3 +1,41 @@
+Node.js is server side Javascript environment based on chrome V8 javascript engine. 
+It enables you to write your server code in javascript, instead of choosing one 
+of the "traditional" web languages such as PHP, c#, python, ruby, perl etc.
+Using node.js and database such as mongodb you could write your web application 
+completely in javascript.
+
+Here's example of the full stack for web development:
+
+1.Backbone for client side, code that runs in the browser (chrome,firefox)
+2.Express server side framework running on Node.js
+3.Mongodb database for storing documents
+
+Above mentioned technologies will enable you create your application writing only javascript code,
+from browser to server and finally to database, sort of one language to rule them, 
+no need for PHP unless you have legacy codebase .
+
+
+
+down vote
+accepted
+Edited:
+
+There are 2 main advantages:
+
+Speed! (Performance)
+Node.js is event-driven and non-blocking and very good at handling concurrent requests.
+
+
+From all the homework I have been doing in the last few days, I obtained the following information. Node.js
+
+is a command-line tool that can be run as a regular web server and lets one run JavaScript programs
+utilizes the great V8 JavaScript engine
+is very good when you need to do several things at the same time
+is event-based so all the wonderful Ajax-like stuff can be done on the server side
+lets us share code between the browser and the backend
+lets us talk with MySQL
+
+
 1135
 
 to set & get port no 
@@ -660,3 +698,21 @@ The two primary performance considerations are
 			
 	
 	npm install --save-dev grunt-contrib-less
+	
+	
+HTTP Long Polling
+-------------------------------------------------------------------------------------------------------------
+HTTP long polling, where the client polls the server requesting new information.  The server holds the request open 
+until new data is available. Once available, the server responds and sends the new information. When the client
+receives the new information, it immediately sends another request, and the operation is repeated. 
+
+How to listen for changes to a MongoDB collection
+
+
+You can listen to events like insert, update, and other data events in mongodb using special collection named oplog. You just need to enable replication on your db instance either using mongod --master or mongod --replicaSet.
+
+Oplog is actually a capped collection which is used by mongodb internally to implement replication. If you are using master/slave replication you will find the collection by the name of oplog.$main, if you are using replica sets it will be named oplog.rs.
+
+You can use a tailable cursor on oplog, that should work.
+
+Oplog, in effect, is logs itself. So you might not need to store them separately for logging purpose. However its size is fixed. Meaning when its full, older data gets deleted.

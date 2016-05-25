@@ -128,3 +128,5 @@ You can download full version of NetBeans from official website or using this li
 # chmod +x netbeans-8.0.2-php-linux.sh
 # sh netbeans-8.0.2-php-linux.sh
 Currently (27/Aug/2015) NetBeans 8.0.2 version is available to install, For more recent versions, visit https://netbeans.org/ official site.
+
+send, or push, data to the client without the client first making a request.
