@@ -642,3 +642,21 @@ Cross-Origin Resource Sharing (CORS)
 	the protocol, domain, and port must match.
 
 	CORS is implemented through the Access-Control-Allow-Origin header.
+	
+	
+Static Resource
+------------------------------------------------------------------------------------------------------
+The two primary performance considerations are 
+
+	1.Reducing the number of requests can be accomplished in two ways: 
+		combining resources (css sprite)
+		browser caching
+		
+	2.reducing content size.
+		a.lossless (size reduction can be achieved without losing any data)
+			ex : minification of JavaScript and CSS, and optimizing PNG images.
+		b.lossy (size reduction is achieved by reducing the quality of static resources)
+			ex : increasing JPEG and video compression levels
+			
+	
+	npm install --save-dev grunt-contrib-less

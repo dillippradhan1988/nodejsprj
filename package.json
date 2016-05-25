@@ -15,20 +15,29 @@
   },
   "dependencies": {
     "body-parser": "^1.15.1",
-    "connect": "^2.0.3",
-    "connect-rest": "^2.5.5",
-    "cookie-parser": "^1.4.1",
+    "connect": "^2.30.2",
+    "connect-bundle": "0.0.5-beta",
+    "connect-rest": "^0.9.14",
+    "cookie-parser": "^1.4.2",
     "cors": "^2.7.1",
+    "csurf": "^1.8.3",
+    "domain": "0.0.1",
     "express": "^4.13.4",
     "express-handlebars": "^3.0.0",
     "express-logger": "0.0.3",
     "express-session": "^1.13.0",
     "formidable": "^1.0.17",
     "jquery-file-upload-middleware": "^0.1.7",
+    "loadtest": "^1.4.0",
     "mongoose": "^4.4.17",
     "morgan": "^1.7.0",
     "nodemailer": "^2.4.1",
+    "passport": "^0.3.2",
+    "passport-facebook": "^2.1.1",
     "q": "^1.4.1",
+    "session-mongoose": "^0.5.2",
+    "underscore": "^1.8.3",
     "vhost": "^3.0.2"
-  }
+  },
+  "devDependencies": {}
 }

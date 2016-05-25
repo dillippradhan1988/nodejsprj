@@ -19,11 +19,18 @@ var handlebars	=	require('express-handlebars').create({
 			if(!this._sections) this._sections = {};
 			this._sections[name] = options.fn(this);
 			return null;
-		}
+		},
+		static: function(name) {
+            return require('./lib/static.js').map(name);
+        }
 	}
 });
 app.engine('handlebars',handlebars.engine);
 app.set('view engine','handlebars');
+
+// set up css/js bundling
+//var bundler = require('connect-bundle')(require('./config.js'));
+///app.use(bundler);
 
 app.set('port',process.env.PORT || 3000);
 
@@ -99,6 +106,13 @@ app.use(require('express-session')({
 
 //static middleware used for adding static to project css,javascript etc
 app.use(express.static(__dirname + '/public'));
+
+// CSRF middleware for form
+app.use(require('csurf')());
+app.use(function(req, res, next){
+    res.locals._csrfToken = req.csrfToken();
+next();
+});
 
 // database configuration
 var mongoose = require('mongoose');
@@ -354,8 +368,67 @@ apiOptions.domain.on('error', function(err){
     if(worker) worker.disconnect();
 });
 
+
 // link API into pipeline
-app.use(vhost('api.*', rest.rester(apiOptions)));
+app.use(rest.rester(apiOptions));
+
+//app.use(vhost('api.*', rest.rester(apiOptions)));
+// link API into pipeline
+// currently commented out to reduce console noise
+//app.use(vhost('api.*', rest.rester(apiOptions)));
+
+// authentication
+var auth = require('./lib/auth.js')(app, {
+    baseUrl: process.env.BASE_URL,
+    providers: credentials.authProviders,
+    successRedirect: '/account',
+    failureRedirect: '/unauthorized',
+});
+// auth.init() links in Passport middleware:
+auth.init();
+
+// now we can specify our auth routes:
+auth.registerRoutes();
+
+// authorization helpers
+function customerOnly(req, res, next){
+    if(req.user && req.user.role==='customer') return next();
+    // we want customer-only pages to know they need to logon
+    res.redirect(303, '/unauthorized');
+}
+function employeeOnly(req, res, next){
+    if(req.user && req.user.role==='employee') return next();
+    // we want employee-only authorization failures to be "hidden", to
+    // prevent potential hackers from even knowhing that such a page exists
+    next('route');
+}
+function allow(roles) {
+    return function(req, res, next) {
+        if(req.user && roles.split(',').indexOf(req.user.role)!==-1) return next();
+        res.redirect(303, '/unauthorized');
+    };
+}
+
+app.get('/unauthorized', function(req, res) {
+    res.status(403).render('unauthorized');
+});
+
+// customer routes
+
+app.get('/account', allow('customer,employee'), function(req, res){
+    res.render('account', { username: req.user.name });
+});
+app.get('/account/order-history', customerOnly, function(req, res){
+    res.render('account/order-history');
+});
+app.get('/account/email-prefs', customerOnly, function(req, res){
+    res.render('account/email-prefs');
+});
+
+// employer routes
+app.get('/sales', employeeOnly, function(req, res){
+    res.render('sales');
+});
 
 // add support for auto views
 var autoViews = {};
