@@ -49,7 +49,7 @@ io.on('connection', function(socket){
         console.log('user disconnected');
     });
     
-    console.log(__dirname);
+    /*console.log(__dirname);
     // watching the xml file
     fs.watchFile(__dirname + '/views/chat/example.xml', function(curr, prev) {
         // on file change we can read the new xml
@@ -60,7 +60,7 @@ io.on('connection', function(socket){
             // send the new data to the client
             socket.volatile.emit('notification', json);
         });
-    });
+    });*/
 });
 
 
