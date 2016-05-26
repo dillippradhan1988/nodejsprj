@@ -44,8 +44,8 @@ fot importing files & folder to local repository
 Node Installation
 -------------------
 cd /tmp
-wget http://nodejs.org/dist/v0.12.0/node-v0.12.0-linux-x64.tar.gz
-tar xvfz node-v0.12.0-linux-x64.tar.gz
+wget http://nodejs.org/dist/v4.4.4/node-v0.12.0-linux-x64.tar.gz
+tar xvfz node-v4.4.4-linux-x64.tar.gz
 sudo mkdir -p /usr/local/nodejs
 sudo mv node-v0.12.0-linux-x64/* /usr/local/nodejs
 export PATH=$PATH:/usr/local/nodejs/bin
