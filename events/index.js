@@ -16,9 +16,12 @@ module.exports = function(io) {
             var reply = JSON.stringify({
                 action: 'message',
                 user: socket.handshake.session.user,
+                //user: 'Dillip',
                 msg: msg.msg
             });
-            console.dir(reply);
+            //console.dir(reply);
+            console.log('message: ' + reply);
+            io.emit('chat', reply);
             //pub.publish('chat', reply);
         });
 
@@ -31,9 +34,11 @@ module.exports = function(io) {
             var reply = JSON.stringify({
                 action: 'control',
                 user: socket.handshake.session.user,
+               // user: 'Dillip',
                 msg: ' joined the channel'
             });
-             console.dir(reply);
+            console.log('message: ' + reply);
+            io.emit('chat', reply);
             //pub.publish('chat', reply);
         });
 

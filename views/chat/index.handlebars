@@ -2,6 +2,8 @@
 <br/>
 {{#if user }}
     <b>User: </b> <label id="user">{{ user }}</label> <a href="/logout" style='color:blue;text-decoration: underline'> Log out</a>
+{{else}}
+    <div id="userLogControl" style="display: none;"><b>User: </b> <label id="userlebel">{{ user }}</label> <a href="/logout" style='color:blue;text-decoration: underline'> Log out</a></div>
 {{/if}}
 
 <div id="ask" class="bordered" style="display: none;">

@@ -1,9 +1,9 @@
+/*global $*/
 $(document).ready(function() {
     //Check if the user is rejoining
     //ps: This value is set by Express if browser session is still valid
     var user = $('#user').text();
     // show join box
-    
     if (user === "") {
         $('#ask').show();
         $('#ask input').focus();
@@ -32,8 +32,8 @@ $(document).ready(function() {
         /*
          Connect to socket.io on the server.
          */
-        var host = window.location.host //.split(':')[0];
-        var socket = io.connect('http://nodejsprj-dillip9090.c9users.io:8080', {
+        var host = window.location.host; //.split(':')[0];
+        var socket = io.connect('http://' + host, {
             reconnect: false,
             'try multiple transports': false
         });
@@ -43,6 +43,7 @@ $(document).ready(function() {
         socket.on('connect', function() {
             console.log('connected');
             // send join message
+            
             socket.emit('join', JSON.stringify({}));
         });
         socket.on('connecting', function() {
@@ -91,13 +92,15 @@ $(document).ready(function() {
 
 
         var container = $('div#msgs');
-
+        var userlebel = $("#userlebel");
+        var userLogControlDv    =   $("#userLogControl");
         /*
          When a message comes from the server, format, colorize it etc. and display in the chat widget
          */
         socket.on('chat', function(msg) {
+            
             var message = JSON.parse(msg);
-
+            console.log(message);//return false;
             var action = message.action;
             var struct = container.find('li.' + action + ':first');
 
@@ -126,6 +129,9 @@ $(document).ready(function() {
                     }
                     break;
                 case 'control':
+                    //alert(userlebel+"++"+userLogControlDv);
+                    userlebel.html(message.user);
+                    userLogControlDv.show();
                     messageView.find('.user').text(message.user);
                     messageView.find('.message').text(message.msg);
                     messageView.addClass('control');
@@ -157,11 +163,11 @@ $(document).ready(function() {
 
 
     function join(name) {
+        //$("#userlebel").html(name);
+        //$("#userLogControl").show();
         $('#ask').hide();
         $('#channel').show();
         $('input#message').focus();
-
-
         $.post('/user', {
             "user": name
         }).success(function() {
