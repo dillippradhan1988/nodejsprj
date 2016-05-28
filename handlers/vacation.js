@@ -34,6 +34,30 @@ exports.getAllVacation = function(req, res){
         res.render('vacations/getallvacations', context);
     });
 };
+exports.getAllVacationPubSub = function(req, res){
+    Vacation.find({ tailable:true, awaitdata:true, numberOfRetries:-1 }, function(err, vacations){
+        var currency = req.session.currency || 'USD';
+        var context = {
+            currency: currency,
+            vacations: vacations.map(function(vacation){
+                return {
+                    sku: vacation.sku,
+                    name: vacation.name,
+                    description: vacation.description,
+                    inSeason: vacation.inSeason,
+                    price: convertFromUSD(vacation.priceInCents/100, currency),
+                    qty: vacation.qty,
+                }
+            })
+        };
+        switch(currency){
+            case 'USD': context.currencyUSD = 'selected'; break;
+            case 'GBP': context.currencyGBP = 'selected'; break;
+            case 'BTC': context.currencyBTC = 'selected'; break;
+        }
+        return context;
+    });
+};
 
 exports.getVacationDetail = function(req, res, next){
     Vacation.findOne({ slug: req.params.vacation }, function(err, vacation){
