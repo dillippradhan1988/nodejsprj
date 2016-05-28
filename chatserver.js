@@ -2,12 +2,11 @@ var express     =   require('express');
 var app         =   express();
 var http        =   require('http').Server(app);
 var io          =   require('socket.io')(http);
-var parser      =   require('xml2json');
 var fs		    =	require('fs');
 
 //set up handlebars view engine
 var handlebars	=	require('express-handlebars').create({
-	defaultLayout:'chat',
+	defaultLayout:'chatserver',
 	helpers: {//for section
 		section: function(name, options){
 			if(!this._sections) this._sections = {};
@@ -15,7 +14,8 @@ var handlebars	=	require('express-handlebars').create({
 			return null;
 		}
 	}
-})
+});
+
 app.engine('handlebars',handlebars.engine);
 app.set('view engine','handlebars');
 app.set('port',3000);
@@ -24,7 +24,9 @@ app.set('port',3000);
 app.use(express.static(__dirname + '/public'));
 
 app.get('/', function(req, res){
-    res.render('chat/chatclient');
+    res.render('chat/chatclient',{
+        layout:'chatserver'
+    });
 });
 
 app.get('/fileread', function(req, res){

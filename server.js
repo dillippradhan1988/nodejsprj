@@ -101,7 +101,7 @@ app.use(require('express-session')({
 	resave: false,
     saveUninitialized: false,
     secret: credentials.cookieSecret,
-    //store: sessionStore
+    store: sessionStore
 }));
 
 //static middleware used for adding static to project css,javascript etc
