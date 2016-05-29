@@ -1,3 +1,69 @@
+thread & process
+http://www.cs.ucsb.edu/~rich/class/cs170/notes/IntroThreads/
+
+
+websocket
+https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API/Writing_WebSocket_client_applications
+
+http://stackoverflow.com/questions/5062614/how-to-decide-when-to-use-node-js
+
+"It is impossible for a distributed computer system to simultaneously provide all three of the
+following guarantees: Consistency, Availability, and Partition tolerance."
+
+Traditional RDBMS solutions are good at consistency and compromise a little once
+it comes to providing better availability (data reads) and partitioning capabilities.
+Most of the NoSQL solutions have been evolved in this direction to achieve better
+heights in data availability and partitioning.
+
+Most popular subsets of NoSQL are
+document stores, key-value stores, and graph-based database solutions.
+
+documents are stored and retrieved from
+MongoDB as JavaScript objects. Internally, this JSON data gets converted to BSON
+format while getting persisted to the system. So, this gives an extreme flexibility where
+we can use the same data format from client to server and eventually to the database.
+
+MongoDB is its schemaless nature
+
+highly concurrent applications with
+heavy read operations in mind.
+
+MongoDB also introduces the concept of sharding, which makes it possible to scale
+the database horizontally as well as vertically. If the application owner needs to
+increase the database capabilities, they could add up more machines into the stack.
+This is a cheaper option compared to investing on RAM of a single machine, which
+will be the case in RDBMS solutions.
+
+Here's just a small list of some big companies that are working with Node:
+	•	 PayPal
+	•	 LinkedIn
+	•	 eBay
+	•	 Walmart
+	•	 Yahoo!
+	•	 Microsoft
+	•	 Dow Jones
+	•	 Uber
+	•	 New York Times
+
+Here's just a small list of some big companies that are working with MongoDB:
+	•	 Cisco
+	•	 Craigslist Inc.
+	•	 Forbes
+	•	 FourSquare
+	•	 Intuit
+	•	 McAfee
+	•	 MTV
+	•	 MetLife
+	•	 Shutterfly
+	•	 Under Armour
+
+wmic os get osarchitecture
+npm install mongodb --save
+
+
+mozilla.org/en-US/docs/Web/JavaScript/Introduction_to_Object-Oriented_JavaScript
+http://code.tutsplus.com/tutorials/javascript-hoisting-explained--net-15092
+
 Composer Setup
 --------------------
 php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
@@ -77,6 +143,7 @@ echo 'deb http://downloads-distro.mongodb.org/repo/ubuntu-upstart dist 10gen' | 
 sudo apt-get update
 sudo apt-get install mongodb-org
 ps -ef | grep mongo
+mongod --version
 mongo --version
 
 sudo mongod
