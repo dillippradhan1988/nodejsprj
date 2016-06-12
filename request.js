@@ -22,6 +22,121 @@ app.set('port',process.env.PORT || 3000);
 app.use(bodyParser.urlencoded());
 app.use(ccookieParser());
 
+//Anonymous Function or first-class functions (function can be treaated as variables)
+/*var foo1 = function namedFunction() { // no use of name, just wasted characters
+    console.log('foo1');
+}
+foo1(); // foo1
+ 
+var foo2 = function () {
+    // no function name given i.e. anonymous function
+    console.log('foo2');
+}
+foo2(); // foo2
+*/
+
+
+
+//Higher-Order Functions
+//Functions that take functions as arguments are called higher-order functions.
+/*setTimeout(function () {
+    console.log('2000 milliseconds have passed since this demo started');
+}, 2000);
+
+function foo() {
+    console.log('2000 milliseconds have passed since this demo started');
+}
+setTimeout(foo, 2000);
+*/
+
+
+
+//Closures
+//Whenever we have a function defined inside another function, the inner function has access to the variables declared
+//in the outer function.
+/*function outerFunction(arg) {
+    var variableInOuterFunction = arg;
+     
+    function bar() {
+        console.log(variableInOuterFunction); // Access a variable from the outer scope
+    }
+     
+    // Call the local function to demonstrate that it has access to arg
+    bar();
+} 
+outerFunction('hello closure!');
+// logs hello closure!
+*/
+/*function outerFunction(arg) {
+    var variableInOuterFunction = arg;
+    return function () {
+        console.log(variableInOuterFunction);
+    }
+}
+ 
+var innerFunction = outerFunction('hello closure!');
+ 
+// Note the outerFunction has returned
+innerFunction(); // logs hello closure!
+*/
+
+
+/*function first(data, cb) {
+    console.log('Executing first');
+    setTimeout(cb, 1000, data);
+} 
+function second(data, cb) {
+    console.log('Executing second');
+    setTimeout(cb, 1000, data);
+} 
+function third(data, cb) {
+    console.log('Executing third');
+    setTimeout(cb, 1000, data);
+} 
+first('data', function (text1) {
+    second(text1, function (text2) {
+        third(text2, function (text3) {
+            console.log('done:', text3); // indented
+        });
+    });
+});
+*/
+
+/*function first(data, cb) {  
+    console.log('Executing first');  
+    setTimeout(cb, 1000, data);    
+} 
+function second(data, cb) {
+    console.log('Executing second');
+    setTimeout(cb, 1000, data);
+} 
+function third(data, cb) {
+    console.log('Executing third');
+    setTimeout(cb, 1000, data);
+} 
+
+function handleCallback1(text1){
+    second(text1,handleCallback2);
+}
+function handleCallback2(text2){
+    third(text2,handleCallback3);
+}
+function handleCallback3(text3){
+    console.log('done:', text3); // indented
+}
+
+first('data',handleCallback1);
+*/
+
+
+
+
+
+
+app.get('/',function(req,res,next){    
+    res.end('Hello');
+});
+
 app.get('/search',function(req,res,next){
     console.log(req.query);
     res.end(JSON.stringify(req.query));

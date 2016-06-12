@@ -1,0 +1,75 @@
+Function
+	All functions return a value in JavaScript. In the absence of an explicit return statement, a function returns undefined.
+
+Immediately Executing Function
+	You can execute a function immediately after you define it. Simply wrap the function in parentheses () and invoke it,
+
+	(function foo() {
+		console.log('foo was executed!');
+	})();
+
+	The reason for having an immediately executing function is to create a new variable scope. An if, else, or while does not create a new variable scope in JavaScript.
+
+Anonymous Function
+	A function without a name is called an anonymous function. In JavaScript, you can assign a function to a variable.
+	If you are going to use a function as a variable, you don’t need to name the function.
+
+	var foo1 = function namedFunction() { 
+		// no use of name, just wasted characters
+		console.log('foo1');
+	}
+	foo1(); // foo1
+ 
+	var foo2 = function () {
+		// no function name given i.e. anonymous function
+		console.log('foo2');
+	}
+	foo2(); // foo2
+
+first-class functions
+	A programming language is said to have first-class functions if a function can be treated the same way as any other
+	variable in the language. JavaScript has first-class functions.
+
+Higher-Order Functions
+	Functions that take functions as arguments are called higher-order functions.
+
+	setTimeout(function () {
+		console.log('2000 milliseconds have passed since this demo started');
+	}, 2000);
+
+Closures
+	Whenever we have a function defined inside another function, the inner function has access to the variables declared
+	in the outer function.
+
+
+
+
+Module In Node.js
+	File-Based Module System
+		• Each file is its own module.
+		• Each file has access to the current module definition using the module variable.
+		• The export of the current module is determined by the module.exports variable.
+		• To import a module, use the globally available require function.
+	Core Module
+		path,fs,os,util,
+
+	external node_modules
+
+node.js module system (CommonJS) Approach
+	var foo = require('./foo');
+	var bar = require('./bar');
+	// continue code here
+
+Browser module system (AMD-async module defination) Approach
+	define(['./foo', './bar'], function(foo, bar){
+		// continue code here
+	});
+	third party RequireJS needed
+
+Globals
+	true globals (shared between all modules) 
+		ex: require,console__dirname__filenameprocessBufferglobal
+
+	local globals (variables specific to the current module).
+		ex: module and exports.
+
