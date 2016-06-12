@@ -92,7 +92,9 @@ switch(app.get('env')){
 }
 
 var MongoSessionStore 	= 	require('session-mongoose')(require('connect'));
-var sessionStore 		= 	new MongoSessionStore({ url: credentials.mongo[app.get('env')].connectionString });
+var sessionStore 		= 	new MongoSessionStore({ 
+    url: credentials.mongo[app.get('env')].connectionString 
+});
 
 //cookie-parser to set a cookie or a signed cookie anywhere you have access
 //to a request object

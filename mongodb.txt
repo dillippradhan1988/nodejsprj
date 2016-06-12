@@ -1,0 +1,46 @@
+online
+---------------------------------------------------------------------------
+sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 7F0CEB10
+echo 'deb http://downloads-distro.mongodb.org/repo/ubuntu-upstart dist 10gen' | sudo tee /etc/apt/sources.list.d/mongodb.list deb http://downloads-distro.mongodb.org/repo/ubuntu-upstart dist 10gen
+sudo apt-get update
+sudo apt-get install mongodb-org
+ps -ef | grep mongo
+mongo --version
+
+offline
+--------------------------------------------------------------------------------
+Step-1
+	tar -zxvf mongodb-linux-x86_64-ubuntu1404-3.2.6.tgz
+	
+Step-2
+	sudo mkdir /usr/lib/mongodb
+	
+Step-3
+	sudo mv mongodb-linux-x86_64-ubuntu1404-3.2.6 /usr/lib/mongodb/
+	
+Step-4
+	Before you start mongod for the first time, you will need to create the data directory. 
+	By default, mongod writes data to the /data/db/ directory. 
+	To create this directory, and set the appropriate permissions use the following commands:
+	
+	mkdir -p /data/db
+	
+Step-5
+	chmod 777 /data/*
+	
+Step-6
+	1st command prompt: Start mongodb server
+	cd /usr/lib/mongodb/mongodb-linux-x86_64-ubuntu1404-3.2.6/bin/
+	
+Step-7
+	./mongod
+
+Step-8
+	2nd command prompt: Start the client
+	cd /usr/lib/mongodb/mongodb-linux-x86_64-ubuntu1404-3.2.6/bin/
+
+Step-9	
+	./mongo
+
+Step-10
+	Check this http://localhost:28017/ in browser to know database status

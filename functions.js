@@ -215,14 +215,170 @@ getConnection(function(err,connection){
 	}
 });*/
 
-//More Prototype
-function Animal(name){
-	this.name = name;
+/*function printableMessage(){
+	var message = 'hello';
+	function setMessage(newMessage){
+		if(!newMessage) throw new Error('cannot set empty property.');
+		message = newMessage;
+	}
+	function getMessage(){
+		return message;
+	}
+	function printMessage(){
+		console.log(message);
+	}
+
+	return {
+		setMessage:setMessage,
+		getMessage:getMessage,
+		printMessage:printMessage
+	}
 }
 
-Animal.prototype.walk = function(destination){
-	console.log(this.name, ' is walking to ', destination);
+var awesome1 = printableMessage();
+awesome1.printMessage();
+*/
+
+//Prototype Inheritance (javascript)
+/*function Animal(name){
+	this.name = name;	
 }
+
+Animal.prototype.walk = function (destination) {
+	console.log(this.name, 'is walking to', destination);
+};
 
 var animal = new Animal('Elephant');
 animal.walk('melbourne');
+
+
+
+function Bird(name){
+	Animal.call(this,name);
+}
+
+Bird.prototype.__proto__ = Animal.prototype;
+Bird.prototype.fly = function(destination){
+	console.log(this.name, 'is flying to ', destination);
+}
+
+var bird = new Bird('Sparrow');
+bird.walk('sydney');
+bird.fly('melbourne');
+*/
+
+//Prototype Inheritance (node.js)
+var inherits = require('util').inherits;
+/*
+function Animal(name){
+	this.name = name;	
+}
+
+Animal.prototype.walk = function (destination) {
+	console.log(this.name, 'is walking to', destination);
+};
+
+var animal = new Animal('Elephant');
+animal.walk('melbourne');
+
+
+
+function Bird(name){
+	Animal.call(this,name);
+}
+
+inherits(Bird, Animal);
+
+Bird.prototype.fly = function(destination){
+	console.log(this.name, 'is flying to ', destination);
+}
+
+var bird = new Bird('Sparrow');
+bird.walk('sydney');
+bird.fly('melbourne');
+*/
+
+//Function override
+/*function Base(){
+	this.message = 'message';
+}
+Base.prototype.foo = function(){
+	return this.message + ' base foo';
+}
+
+function Child(){
+	Base.call(this);
+}
+inherits(Child,Base);
+
+Child.prototype.foo = function(){
+ 	return Base.prototype.foo.call(this) + ' child foo';
+}
+
+var child = new Child();
+console.log(child.foo());
+*/
+
+//Events
+/*var EventEmitter = require('events').EventEmitter;
+var emitter = new EventEmitter();
+
+
+//subscribe
+emitter.on('foo',function(arg1,arg2){
+	console.log('Foo raised ', arg1, arg2);
+});
+
+emitter.emit('foo',{ a:123 },{ b:456 });
+*/
+ /*
+var fooHandler = function () {
+	console.log('handler called');
+	 
+	// Unsubscribe
+	emitter.removeListener('foo',fooHandler);
+};
+ 
+//emitter.on('foo', fooHandler);
+
+emitter.once('foo', fooHandler);
+ 
+// Emit twice
+emitter.emit('foo');
+emitter.emit('foo');
+
+
+emitter.on('foo', function a() { });
+emitter.on('foo', function b() { });
+console.log(emitter.listeners('foo'));
+*/
+// Listener addition / removal notifications
+/*emitter.on('removeListener', function (eventName, listenerFunction) {
+console.log(eventName, 'listener removed', listenerFunction.name);
+});
+emitter.on('newListener', function (eventName, listenerFunction) {
+console.log(eventName, 'listener added', listenerFunction.name);
+});
+ 
+function a() { }
+function b() { }
+ 
+// Add
+emitter.on('foo', a);
+emitter.on('foo', b);
+ 
+// Remove
+emitter.removeListener('foo', a);
+emitter.removeListener('foo', b);
+*/
+var http = require('http');
+
+var server = http.createServer(function(request,response){
+	console.log('server starting');
+	response.write('Hello World');
+	response.end()
+});
+
+server.listen(3000);
+
+console.log('server is running at http://127.0.0.1:3000/');

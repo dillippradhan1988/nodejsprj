@@ -1,3 +1,9 @@
+client-side XHRs (XMLHttpRequest)
+XMLHttpRequest (XHR) is a global class available in all modern browsers that allows you to make HTTP requests
+using JavaScript. The name is XMLHttpRequest to ensure that all browsers follow the same name for this class. The name
+has XML in it because that was the original intended data format for making HTTP requests, but it is not relevant anymore
+as it can be used to make HTTP requests in any format. In fact, most people just use the JSON format now.
+
 thread & process
 http://www.cs.ucsb.edu/~rich/class/cs170/notes/IntroThreads/
 
