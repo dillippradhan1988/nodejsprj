@@ -1,3 +1,8 @@
+A few points to keep in mind when working with async functions based
+on callbacks are the following:
+1. Never call the callback twice.
+2. Never throw an error.
+
 client-side XHRs (XMLHttpRequest)
 XMLHttpRequest (XHR) is a global class available in all modern browsers that allows you to make HTTP requests
 using JavaScript. The name is XMLHttpRequest to ensure that all browsers follow the same name for this class. The name
