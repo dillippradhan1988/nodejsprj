@@ -133,7 +133,7 @@ async.parallel([
     }
 ],itemsLoaded);*/
 
-var fs = require('fs');
+/*var fs = require('fs');
 
 function loadJSON(filename, cb){
     fs.readFile(filename,function(err, data){
@@ -158,4 +158,28 @@ loadJSON('package.json',function(err, data){
     }else{
         console.log(data);
     }
-})
+})*/
+
+
+
+
+
+
+//promise
+var Q = require('q');
+
+function getPromise() {
+    var deferred = Q.defer();
+    // Resolve the promise after a second
+    setTimeout(function () {
+        deferred.resolve('final value');
+    }, 1000);
+    
+    return deferred.promise;
+}
+
+var promise = getPromise();
+
+promise.then(function (val) {
+    console.log('done with:', val);
+});
