@@ -44,3 +44,118 @@ Step-9
 
 Step-10
 	Check this http://localhost:28017/ in browser to know database status
+	
+	
+MongoDB is a document-oriented database, not a relational one. The primary reason
+for moving away from the relational model is to make scaling out easier, but there are
+some other advantages as well.
+
+• A document is the basic unit of data for MongoDB and is roughly equivalent to a
+row in a relational database management system (but much more expressive).
+• Similarly, a collection can be thought of as a table with a dynamic schema.
+• A single instance of MongoDB can host multiple independent databases, each of
+which can have its own collections.
+• Every document has a special key, "_id", that is unique within a collection.
+• MongoDB comes with a simple but powerful JavaScript shell, which is useful for
+the administration of MongoDB instances and data manipulation.
+
+
+
+To start the server,run the mongod executable:
+	mongod
+	
+To start the client,run the mongo executable:	
+	mongo
+	
+Data Types
+	null
+		Null can be used to represent both a null value and a nonexistent field:
+			{"x" : null}
+	boolean
+		There is a boolean type, which can be used for the values true and false:
+			{"x" : true}
+	number
+		The shell defaults to using 64-bit floating point numbers. Thus, these numbers look
+		“normal” in the shell:
+			{"x" : 3.14}
+			or:
+			{"x" : 3}
+		For integers, use the NumberInt or NumberLong classes, which represent 4-byte or
+		8-byte signed integers, respectively.
+			{"x" : NumberInt("3")}
+			{"x" : NumberLong("3")}
+	string
+		Any string of UTF-8 characters can be represented using the string type:
+			{"x" : "foobar"}
+	date
+		Dates are stored as milliseconds since the epoch. The time zone is not stored:
+			{"x" : new Date()}
+	regular expression
+		Queries can use regular expressions using JavaScript’s regular expression syntax:
+			{"x" : /foobar/i}
+	array
+		Sets or lists of values can be represented as arrays:
+			{"x" : ["a", "b", "c"]}
+	embedded document
+		Documents can contain entire documents embedded as values in a parent
+		document:
+			{"x" : {"foo" : "bar"}}
+	object id
+		An object id is a 12-byte ID for documents. 
+			{"x" : ObjectId()}
+			
+	There are also a few less common types that you may need, including:
+	
+	binary data
+		Binary data is a string of arbitrary bytes. It cannot be manipulated from the shell.
+		Binary data is the only way to save non-UTF-8 strings to the database.
+	code
+		Queries and documents can also contain arbitrary JavaScript code:
+			{"x" : function() { /* ... */ }}
+			
+
+ObjectIds use 12 bytes of storage, which gives them a string representation that is 24
+hexadecimal digits: 2 digits for each byte.
+	0 1 2 3 		4 5 6		7 8 	9 10 11
+	Timestamp		Machine 	PID 	Increment
+	
+	The first four bytes of an ObjectId are a timestamp in seconds since the epoch. This
+	provides a couple of useful properties:
+	
+	The next three bytes of an ObjectId are a unique identifier of the machine on which it
+	was generated. This is usually a hash of the machine’s hostname. By including these
+	bytes, we guarantee that different machines will not generate colliding ObjectIds.
+	
+	To provide uniqueness among different processes generating ObjectIds concurrently
+	on a single machine, the next two bytes are taken from the process identifier (PID) of
+	the ObjectId-generating process.
+	
+	These first nine bytes of an ObjectId guarantee its uniqueness across machines and
+	processes for a single second. The last three bytes are simply an incrementing counter
+	that is responsible for uniqueness within a second in a single process. This allows for
+	up to 2563 (16,777,216) unique ObjectIds to be generated per process in a single second.
+	
+MongoDB do not accept messages longer than 48 MB, so there isa limit to how much can be 
+inserted in a single batch insert.
+
+all documents must be smaller than 16 MB
+
+
+> db.foo.batchInsert([{"_id" : 0}, {"_id" : 1}, {"_id" : 1}, {"_id" : 2}])
+Only the first two documents will be inserted, as the third will produce an error: you
+cannot insert two documents with the same "_id".
+If you want to ignore errors and make batchInsert attempt to insert the rest of the
+batch, you can use the continueOnError option to continue after an insert failure. This
+would insert the first, second, and fourth documents above. The shell does not support
+this option, but all the drivers do.
+
+To see the BSON size (in bytes) of the document doc, run Object.bsonsize(doc) from the shell.
+
+
+When using modifiers, the value of "_id" cannot be changed. (Note that "_id" can be
+changed by using whole-document replacement.) Values for any other key, including
+other uniquely indexed keys, can be modified.
+
+db.users.find({"username" : 1}, {"username" : 1, "email" : 1})
+
+{"fatal_weakness" : 0} to remove _id
