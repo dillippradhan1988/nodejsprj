@@ -9,6 +9,12 @@ using JavaScript. The name is XMLHttpRequest to ensure that all browsers follow 
 has XML in it because that was the original intended data format for making HTTP requests, but it is not relevant anymore
 as it can be used to make HTTP requests in any format. In fact, most people just use the JSON format now.
 
+The View handles the visual part,
+taking care of user interaction. The Controller responds to system and user events,
+commanding the Model and View to change appropriately. The Model handles data
+manipulation, responding to requests for information or changing its state according
+to the Controller's instructions.
+
 thread & process
 http://www.cs.ucsb.edu/~rich/class/cs170/notes/IntroThreads/
 

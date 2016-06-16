@@ -166,7 +166,7 @@ loadJSON('package.json',function(err, data){
 
 
 //promise
-var Q = require('q');
+/*var Q = require('q');
 
 function getPromise() {
     var deferred = Q.defer();
@@ -182,4 +182,4 @@ var promise = getPromise();
 
 promise.then(function (val) {
     console.log('done with:', val);
-});
+});*/

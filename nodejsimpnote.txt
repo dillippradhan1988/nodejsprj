@@ -1,3 +1,16 @@
+In a Windows environment, this can be done by executing the following
+command in your command prompt:
+> set NODE_ENV=development
+While in a Unix-based environment, you should simply use the following
+export command:
+$ export NODE_ENV=development
+
+curl -X POST -H "Content-Type: application/json" -d '{"firstName":"Rakesh", "lastName":"Nayak","email":"rakesh@gmail.com","username":"rakesh9090","password":"221441"}' http://mean-dillip9090.c9users.io:8080/users
+
+curl -X PUT -H "Content-Type: application/json" -d '{"lastName":"Pradhan"}' http://mean-dillip9090.c9users.io:8080/users/576287ad1c276ad718486bc9
+
+curl -X DELETE http://mean-dillip9090.c9users.io:8080/users/5762919248209f9f193be5bd
+
 Node.js is server side Javascript environment based on chrome V8 javascript engine. 
 It enables you to write your server code in javascript, instead of choosing one 
 of the "traditional" web languages such as PHP, c#, python, ruby, perl etc.

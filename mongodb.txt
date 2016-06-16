@@ -159,3 +159,9 @@ other uniquely indexed keys, can be modified.
 db.users.find({"username" : 1}, {"username" : 1, "email" : 1})
 
 {"fatal_weakness" : 0} to remove _id
+
+
+MongoDB is its JSON-like storage format named
+BSON. Standing for Binary JSON, the BSON format is a binary-encoded serialization
+of JSON-like documents, and it is designed to be more efficient in size and speed,
+allowing MongoDB's high read/write throughput.
